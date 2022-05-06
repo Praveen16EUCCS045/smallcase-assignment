@@ -96,7 +96,7 @@ variable "common_tags" {
 
 variable "container_port" {
   type        = number
-  default     = "3000"
+  default     = "8000"
   description = "Port of container"
 }
 

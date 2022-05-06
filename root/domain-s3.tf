@@ -5,7 +5,7 @@ locals {
   lambda_init_key             = "${local.lambda_init_bucket_folder}/${local.lambda_init_bucket_filename}"
 
   custom_image_bucket_folder   = "images"
-  custom_image_bucket_filename = "flint_group_logo.png"
+  custom_image_bucket_filename = "a.png"
 
 }
 
@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "s3_b2b_policy" {
   }
 }
 
-module "s3_b2b_bucket" {
+module "s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "2.2.0"
 
@@ -55,29 +55,13 @@ data "archive_file" "lamnda_init_zip" {
 ################ Upload init function to S3 bucket ############################
 
 resource "aws_s3_bucket_object" "object" {
-  bucket = module.s3_b2b_bucket.s3_bucket_id
+  bucket = module.s3_bucket.s3_bucket_id
   key    = "${local.lambda_init_bucket_folder}/${local.lambda_init_bucket_filename}"
   source = "${path.module}/lambda-initialization.zip"
 
   depends_on = [
-    module.s3_b2b_bucket,
+    module.s3_bucket,
     data.archive_file.lamnda_init_zip
-  ]
-
-}
-
-################ Upload Logo Files to S3 bucket ############################
-
-resource "aws_s3_bucket_object" "logo_object" {
-  bucket       = module.s3_b2b_bucket.s3_bucket_id
-  key          = "${local.custom_image_bucket_folder}/${local.custom_image_bucket_filename}"
-  acl          = "public-read"
-  content_type = "image/png"
-  source       = "${path.module}/config/images/flint_group_logo.png"
-
-  depends_on = [
-    module.s3_b2b_bucket
-    
   ]
 
 }

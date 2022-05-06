@@ -47,6 +47,19 @@ variable "resource_suffix" {
   }
 }
 
+variable "app_name" {
+  description = "map of app names"
+  type        = map(any)
+  default = {
+    "sample1"         = "sample1",
+    "sample2"         = "sample2",
+    "sample3"         = "sample3",
+    "sample4"         = "sample4",
+    "sample5"         = "sample5",
+  }
+}
+
+
 #####################################################################
 # ecs-alb variables
 #####################################################################
@@ -88,12 +101,6 @@ variable "ecs_scope" {
   default = "service"
 }
 
-variable "b2b_domain" {
-  description = "Domain name for b2b Portal"
-  type        = string
-  default     = "b2b"
-}
-
 variable "container_cpu" {
   type = number
 }
@@ -125,3 +132,9 @@ variable "database_subnet_cidr" {
   description = "database subnet cidr"
 }
 
+
+variable "lambda_initialization_file" {
+  description = "Source code file for lambda function initialization"
+  type        = string
+  default     = "lambda-initialization.zip"
+}
